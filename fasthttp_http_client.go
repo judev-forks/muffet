@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"net/url"
 	"time"
 
@@ -25,7 +26,11 @@ func (c *fasthttpHTTPClient) Get(u *url.URL, headers map[string]string) (httpRes
 	req.SetConnectionClose()
 
 	for k, v := range headers {
-		req.Header.Add(k, v)
+		if strings.ToLower(k) == "user-agent" {
+			req.Header.SetUserAgent(v)
+		} else {
+			req.Header.Add(k, v)
+		}
 	}
 
 	i := 0
